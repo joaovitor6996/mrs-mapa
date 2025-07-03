@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Mapa Interativo da MRS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: sans-serif;
+      background-color: #fff;
+      text-align: center;
+    }
+
+    h1 {
+      margin-top: 10px;
+      color: #004aad;
+    }
+
+    #map {
+      height: 90vh;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #004aad;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+</head>
+<body>
+  <h1>Mapa Interativo da MRS</h1>
+  <button onclick="ativarEdicao()">Modo Admin</button>
+  <div id="map"></div>
+
+  <script>
+    let modoAdmin = false;
+
+    const coordenadorias = [
+      { nome: "COSU - Coordenadoria Sul", lat: -21.7656, lng: -43.3436 },
+      { nome: "COCE - Coordenadoria Central", lat: -19.9191, lng: -43.9386 },
+      { nome: "COSE - Coordenadoria Sudeste", lat: -22.5202, lng: -44.0970 },
+      { nome: "COSP - Coordenadoria São Paulo", lat: -23.5505, lng: -46.6333 },
+      { nome: "COVA - Coordenadoria Vale", lat: -22.4706, lng: -43.8267 }
+    ];
+
+    const map = L.map('map').setView([-21.5, -44.5], 7);
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    coordenadorias.forEach(ponto => {
+      const marker = L.marker([ponto.lat, ponto.lng]).addTo(map);
+      marker.bindPopup(ponto.nome);
+    });
+
+    function ativarEdicao() {
+      const senha = prompt("Digite a senha de administrador:");
+      if (senha === "Adminmrs2025") {
+        modoAdmin = true;
+        alert("Modo Admin ativado! Clique no mapa para adicionar novos pontos.");
+        map.on('click', adicionarMarcador);
+      } else {
+        alert("Senha incorreta.");
+      }
+    }
+
+    function adicionarMarcador(e) {
+      if (!modoAdmin) return;
+      const nome = prompt("Nome do novo ponto:");
+      if (!nome) return;
+      const marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+      marker.bindPopup(nome);
+    }
+  </script>
+</body>
+</html>
