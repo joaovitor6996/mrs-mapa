@@ -1,9 +1,0 @@
-
-{
-  "name": "Mapa MRS COSU",
-  "short_name": "MRS COSU",
-  "start_url": "index.html",
-  "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#fdd835"
-}
